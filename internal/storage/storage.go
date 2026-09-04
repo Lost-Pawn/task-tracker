@@ -33,3 +33,24 @@ func LoadTasks() ([]task.Task, error) {
 
 	return tasksList, nil
 }
+
+func SaveTasks(tasks []task.Task) error {
+	taskpath := filepath.Join(".", "tasks.json")
+	tasksFile, err := os.Create(taskpath)
+	if err != nil {
+		return fmt.Errorf("failed to create tasks file: %w", err)
+	}
+	defer tasksFile.Close()
+
+	bytes, err := json.MarshalIndent(tasks, "", "  ")
+	if err != nil {
+		return fmt.Errorf("failed to encode tasks to file: %w", err)
+	}
+
+	_, err = tasksFile.Write(bytes)
+	if err != nil {
+		return fmt.Errorf("failed to write tasks to file: %w", err)
+	}
+
+	return nil
+}
