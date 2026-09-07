@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"task-tracker/internal/storage"
+	"task-tracker/internal/task"
 )
 
 func main() {
@@ -22,7 +23,23 @@ func main() {
 
 	switch (os.Args[1]) {
 	case "add":
-		fmt.Println("Add command selected.")
+		description := os.Args[2]
+		if len(os.Args) < 3 {
+			fmt.Println("Error: Task description is required for 'add' command.")
+			return
+		}
+
+		tasks, err = task.AddTask(tasks, description)
+		if err != nil {
+			fmt.Println("Error adding task:", err)
+		}
+		saveErr := storage.SaveTasks(tasks)
+		if saveErr != nil {
+			fmt.Println("Error saving tasks:", saveErr)
+		}
+		
+		fmt.Printf("Successfully added task: %d", tasks[len(tasks)-1].ID)
+		
 	case "list":
 		fmt.Println("List command selected.")
 	case "update":
