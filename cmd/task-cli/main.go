@@ -33,13 +33,14 @@ func main() {
 		if err != nil {
 			fmt.Println("Error adding task:", err)
 		}
+
 		saveErr := storage.SaveTasks(tasks)
 		if saveErr != nil {
 			fmt.Println("Error saving tasks:", saveErr)
+		} else {
+			fmt.Printf("Successfully added task: %d", tasks[len(tasks)-1].ID)
 		}
-		
-		fmt.Printf("Successfully added task: %d", tasks[len(tasks)-1].ID)
-		
+
 	case "list":
 		fmt.Println("List command selected.")
 	case "update":
