@@ -47,7 +47,7 @@ func main() {
 			status = os.Args[2]
 		}
 		if status == "" {
-			fmt.Println("You might wanna filter through staus: todo, done, in-process")
+			fmt.Println("You might wanna filter through status: todo, done, in-process")
 		}
 		filteredTasks, err := task.ListTasks(tasks, status)
 		if err != nil {
