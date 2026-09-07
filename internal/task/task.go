@@ -36,10 +36,6 @@ func AddTask(tasks []Task, description string) ([]Task, error) {
 	}
 
 	tasks = append(tasks, newTask)
-	storageErr := storage.SaveTasks(tasks)
-	if storageErr != nil {
-		return tasks, fmt.Errorf("failed to save tasks: %w", storageErr)
-	}
 
 	return tasks, nil
 }
