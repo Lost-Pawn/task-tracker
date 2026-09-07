@@ -42,7 +42,28 @@ func main() {
 		}
 
 	case "list":
-		fmt.Println("List command selected.")
+		status := ""
+		if len(os.Args) > 2 {
+			status = os.Args[2]
+		}
+		if status == "" {
+			fmt.Println("You might wanna filter through staus: todo, done, in-process")
+		}
+		filteredTasks, err := task.ListTasks(tasks, status)
+		if err != nil {
+			fmt.Println("Error listing tasks:", err)
+			return
+		}
+
+		if len(filteredTasks) == 0 {
+			fmt.Println("No tasks found.")
+		} else {
+			fmt.Println("Tasks:")
+			for _, t := range filteredTasks {
+				fmt.Printf("ID: %d, Description: %s, Status: %s\n", t.ID, t.Description, t.Status)
+			}
+		}
+		
 	case "update":
 		fmt.Println("Update command selected.")
 	case "delete":
