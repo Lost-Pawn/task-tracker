@@ -39,3 +39,17 @@ func AddTask(tasks []Task, description string) ([]Task, error) {
 
 	return tasks, nil
 }
+
+func ListTasks(tasks []Task, status string) ([]Task, error) {
+	if status == "" {
+		return tasks, nil
+	}
+	
+	var filteredTasks []Task
+	for _, task := range tasks {
+		if task.Status == status {
+			filteredTasks = append(filteredTasks, task)
+		} 
+	}
+	return filteredTasks, nil
+}
