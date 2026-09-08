@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"os"
+	"strconv"
 	"task-tracker/internal/storage"
 	"task-tracker/internal/task"
 )
@@ -65,7 +66,36 @@ func main() {
 		}
 		
 	case "update":
-		fmt.Println("Update command selected.")
+		if len(os.Args) < 4 {
+			fmt.Println("Error: Task ID and new description are required for 'update' command.")
+			return
+		}
+
+		newDescription := os.Args[3]
+		if newDescription == "" {
+			fmt.Println("Error: New description is required for 'update' command.")
+			return
+		}
+
+		taskID, err := strconv.Atoi(os.Args[2])
+		if err != nil {
+			fmt.Println("Error: Please provide a valid Task ID")
+			return
+		}
+
+		tasks, err = task.UpdateTaskDescription(tasks, taskID, newDescription)
+		if err != nil {
+			fmt.Println("Error updating task:", err)
+			return
+		}
+
+		saveErr := storage.SaveTasks(tasks)
+		if saveErr != nil {
+			fmt.Println("Error saving tasks:", saveErr)
+		} else {
+			fmt.Printf("Successfully updated task ID %d to description '%s'\n", taskID, newDescription)
+		}	
+
 	case "delete":
 		fmt.Println("Delete command selected.")
 	case "mark-in-progress":
