@@ -53,3 +53,14 @@ func ListTasks(tasks []Task, status string) ([]Task, error) {
 	}
 	return filteredTasks, nil
 }
+
+func UpdateTaskDescription(tasks []Task, id int, description string) ([]Task, error) {
+	for i, task := range tasks {
+		if task.ID == id {
+			tasks[i].Description = description
+			tasks[i].UpdatedAt = time.Now()
+			return tasks, nil
+		} 
+	}
+	return tasks, fmt.Errorf("No tasks found with that ID")
+}
