@@ -74,3 +74,14 @@ func DeleteTask(tasks []Task, id int) ([]Task, error) {
 	}
 	return tasks, fmt.Errorf("No tasks found with that ID")
 }
+
+func MarkInProgress(tasks []Task, id int) ([]Task, error) {
+	for i, task := range tasks {
+		if task.ID == id {
+			tasks[i].Status = "in-progress"
+			tasks[i].UpdatedAt = time.Now()
+			return tasks, nil
+		}
+	}
+	return tasks, fmt.Errorf("No tasks found with that ID")
+}
