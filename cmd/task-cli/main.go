@@ -15,8 +15,6 @@ func main() {
 		return
 	}
 
-	fmt.Println("Loaded tasks:", tasks)
-
 	if len(os.Args) < 2 {
 		fmt.Println("No command provided. Use 'help' to see available commands.")
 		return
@@ -145,9 +143,32 @@ func main() {
 		} else {
 			fmt.Printf("Successfully marked task ID %d as in-progress\n", taskID)
 		}
-		
+
 	case "mark-done":
-		fmt.Println("Mark completed command selected.")	
+		if len(os.Args) < 3 {
+			fmt.Println("Error: Task ID is required for 'mark-done' command.")
+			return
+		}
+
+		taskID, err := strconv.Atoi(os.Args[2])
+		if err != nil {
+			fmt.Println("Error: Please provide a valid Task ID")
+			return
+		}
+		
+		tasks, err = task.MarkDone(tasks, taskID)
+		if err != nil {
+			fmt.Println("Error marking task as done:", err)
+			return
+		}
+
+		saveErr := storage.SaveTasks(tasks)
+		if saveErr != nil {
+			fmt.Println("Error saving tasks:", saveErr)
+		} else {
+			fmt.Printf("Successfully marked task ID %d as done\n", taskID)
+		}
+		
 	case "help":
 		fmt.Println("Help command selected.")
 		fmt.Println("Available commands:")
