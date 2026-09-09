@@ -97,7 +97,30 @@ func main() {
 		}	
 
 	case "delete":
-		fmt.Println("Delete command selected.")
+		if len(os.Args) < 3 {
+			fmt.Println("Error: Task ID is required for 'delete' command.")
+			return
+		}
+
+		taskID, err := strconv.Atoi(os.Args[2])
+		if err != nil {
+			fmt.Println("Error: Please provide a valid Task ID")
+			return
+		}
+		
+		tasks, err = task.DeleteTask(tasks, taskID)
+		if err != nil {
+			fmt.Println("Error deleting task:", err)
+			return
+		}
+
+		saveErr := storage.SaveTasks(tasks)
+		if saveErr != nil {
+			fmt.Println("Error saving tasks:", saveErr)
+		} else {
+			fmt.Printf("Successfully deleted task ID %d\n", taskID)
+		}
+		
 	case "mark-in-progress":
 		fmt.Println("Mark in progress command selected.")
 	case "mark-done":
